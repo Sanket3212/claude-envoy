@@ -22,6 +22,15 @@ index aef33aa103..1ec243318f 100644
  load("@proxy_wasm_rust_sdk//bazel:dependencies.bzl", "proxy_wasm_rust_sdk_dependencies")
 -load("@rules_buf//buf:repositories.bzl", "rules_buf_toolchains")
  load("@rules_foreign_cc//foreign_cc:repositories.bzl", "rules_foreign_cc_dependencies")
+@@ -41,7 +40,7 @@ def envoy_dependency_imports(go_version = GO_VERSION, jq_version = JQ_VERSION,
+     rules_foreign_cc_dependencies()
+     go_rules_dependencies()
+-    go_register_toolchains(go_version)
+     if go_version != "host":
+         envoy_download_go_sdks(go_version)
++    go_register_toolchains(go_version)
+     gazelle_dependencies(go_sdk = "go_sdk")
+     apple_rules_dependencies()
 @@ -71,10 +70,6 @@ def envoy_dependency_imports(go_version = GO_VERSION, jq_version = JQ_VERSION,
      register_yq_toolchains(version = yq_version)
      parser_deps()
