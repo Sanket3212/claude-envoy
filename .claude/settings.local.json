@@ -5,7 +5,20 @@
       "Bash(curl -s \"https://raw.githubusercontent.com/envoyproxy/envoy/v1.35.0/bazel/repository_locations.bzl\")",
       "Bash(curl -s \"https://raw.githubusercontent.com/envoyproxy/envoy/v1.35.0/bazel/repositories.bzl\")",
       "WebSearch",
-      "WebFetch(domain:github.com)"
+      "WebFetch(domain:github.com)",
+      "Bash(curl -s \"https://api.github.com/repos/bazelbuild/rules_go/issues?state=all&per_page=50&labels=&q=bzl+BUILD+package\")",
+      "Bash(python3 -c \"import sys,json; data=json.load\\(sys.stdin\\); [print\\(f''''#{i[number]} [{i[state]}] {i[title]} \\({i[created_at][:10]}\\)''''\\) for i in data if any\\(kw in i.get\\(''''title'''',''''''''\\).lower\\(\\) or kw in i.get\\(''''body'''',''''''''\\).lower\\(\\) for kw in [''''corresponding package'''',''''does not have one'''',''''build file in the same'''',''''go/deps.bzl'''']\\)]\")",
+      "Bash(curl -s \"https://api.github.com/repos/bazel-contrib/rules_go/issues?state=all&per_page=100&since=2024-01-01\")",
+      "Bash(git apply:*)",
+      "Bash(sudo dnf:*)",
+      "Bash(apt-get install:*)",
+      "Bash(yum install:*)",
+      "Bash(dpkg -l patch)",
+      "Bash(python3:*)",
+      "Bash(git -C /home/sanketkumbhar/Documents/claude_working_envoy/envoy cat-file -t 42a2137221)",
+      "Bash(git -C /home/sanketkumbhar/Documents/claude_working_envoy/envoy cat-file -t 9ecef30c31)",
+      "Bash(pip3 install:*)",
+      "Bash(awk 'NR==225' bazel/repositories.bzl sed -n '250,300p' bazel/repositories.bzl)"
     ]
   }
 }
