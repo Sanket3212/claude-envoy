@@ -262,16 +262,11 @@ diff --git a/bazel/repositories.bzl b/bazel/repositories.bzl
 index 42a2137221..9ecef30c31 100644
 --- a/bazel/repositories.bzl
 +++ b/bazel/repositories.bzl
-@@ -105,7 +105,12 @@ def _go_deps(skip_targets):
+@@ -105,6 +105,6 @@ def _go_deps(skip_targets):
      # Keep the skip_targets check around until Istio Proxy has stopped using
      # it to exclude the Go rules.
      if "io_bazel_rules_go" not in skip_targets:
--        external_http_archive(name = "io_bazel_rules_go")
-+        external_http_archive(
-+            name = "io_bazel_rules_go",
-+            patch_args = ["-p1"],
-+            patches = ["@envoy//bazel:rules_go.patch"],
-+        )
+         external_http_archive(name = "io_bazel_rules_go")
          external_http_archive("bazel_gazelle")
 
  def _rust_deps():
@@ -359,33 +354,6 @@ index 6904bc93bd..5f5c213052 100644
          urls = ["https://github.com/bazelbuild/rules_go/releases/download/v{version}/rules_go-v{version}.zip"],
          use_category = ["build", "api"],
          release_date = "2025-02-11",
-diff --git a/bazel/rules_go.patch b/bazel/rules_go.patch
-new file mode 100644
-index 0000000000..78232e112f
---- /dev/null
-+++ b/bazel/rules_go.patch
-@@ -0,0 +1,22 @@
-+diff --git a/go/private/platforms.bzl b/go/private/platforms.bzl
-+index 664f7aed..e7938e00 100644
-+--- a/go/private/platforms.bzl
-++++ b/go/private/platforms.bzl
-+@@ -30,8 +30,7 @@ BAZEL_GOARCH_CONSTRAINTS = {
-+     "amd64": "@platforms//cpu:x86_64",
-+     "arm": "@platforms//cpu:armv7",
-+     "arm64": "@platforms//cpu:aarch64",
-+-    "ppc64": "@platforms//cpu:ppc",
-+-    "ppc64le": "@platforms//cpu:ppc",
-++    "ppc64le": "@platforms//cpu:ppc64le",
-+     "s390x": "@platforms//cpu:s390x",
-+ }
-+@@ -62,7 +61,6 @@ GOOS_GOARCH = (
-+     ("linux", "mips64"),
-+     ("linux", "mips64le"),
-+     ("linux", "mipsle"),
-+-    ("linux", "ppc64"),
-+     ("linux", "ppc64le"),
-+     ("linux", "riscv64"),
-+     ("linux", "s390x"),
 diff --git a/envoy/ssl/private_key/private_key.h b/envoy/ssl/private_key/private_key.h
 index 5601f492d3..861df49516 100644
 --- a/envoy/ssl/private_key/private_key.h
