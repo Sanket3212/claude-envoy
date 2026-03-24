@@ -17,15 +17,16 @@ diff --git a/api/bazel/repositories.bzl b/api/bazel/repositories.bzl
 index 8669544cdf..4e3624f9dd 100644
 --- a/api/bazel/repositories.bzl
 +++ b/api/bazel/repositories.bzl
-@@ -36,6 +36,8 @@ def api_dependencies():
+@@ -36,6 +36,10 @@ def api_dependencies():
      )
      external_http_archive(
          name = "rules_buf",
-+        patch_args = ["-p1"],
-+        patches = ["@envoy//bazel:rules_buf.patch"],
++        patch_cmds = [
++            "sed -i 's/cpu not in \\[\"arm64\", \"amd64\"\\]/cpu not in [\"arm64\", \"amd64\", \"ppc64le\"]/' buf/internal/toolchain.bzl",
++        ],
      )
      external_http_archive(
-         name = "rules_proto",
+         name = "com_github_openzipkin_zipkinapi",
 diff --git a/bazel/BUILD b/bazel/BUILD
 --- a/bazel/BUILD
 +++ b/bazel/BUILD
@@ -339,25 +340,6 @@ index 6904bc93bd..5f5c213052 100644
          urls = ["https://github.com/bazelbuild/rules_go/releases/download/v{version}/rules_go-v{version}.zip"],
          use_category = ["build", "api"],
          release_date = "2025-02-11",
-diff --git a/bazel/rules_buf.patch b/bazel/rules_buf.patch
-new file mode 100644
-index 0000000000..f1d3f6ad1c
---- /dev/null
-+++ b/bazel/rules_buf.patch
-@@ -0,0 +1,13 @@
-+diff --git a/buf/internal/toolchain.bzl b/buf/internal/toolchain.bzl
-+index 1cc60ff..5736cd4 100644
-+--- a/buf/internal/toolchain.bzl
-++++ b/buf/internal/toolchain.bzl
-+@@ -115,7 +115,7 @@ def _buf_download_releases_impl(ctx):
-+         version = versions[0]["name"]
-+
-+     os, cpu = _detect_host_platform(ctx)
-+-    if os not in ["linux", "darwin", "windows"] or cpu not in ["arm64", "amd64"]:
-++    if os not in ["linux", "darwin", "windows"] or cpu not in ["arm64", "amd64", "ppc64le"]:
-+         fail("Unsupported operating system or cpu architecture ")
-+     if os == "linux" and cpu == "arm64":
-+         cpu = "aarch64"
 diff --git a/bazel/rules_go.patch b/bazel/rules_go.patch
 new file mode 100644
 index 0000000000..78232e112f
