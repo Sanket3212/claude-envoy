@@ -117,7 +117,7 @@ diff --git a/bazel/dependency_imports.bzl b/bazel/dependency_imports.bzl
 index aef33aa103..1ec243318f 100644
 --- a/bazel/dependency_imports.bzl
 +++ b/bazel/dependency_imports.bzl
-@@ -41,6 +41,11 @@ def envoy_dependency_imports(go_version = GO_VERSION, jq_version = JQ_VERSION, y
+@@ -41,6 +41,11 @@ def envoy_dependency_imports(go_version = GO_VERSION, jq_version = JQ_VERSION,
      pip_dev_dependencies()
      pip_fuzzing_dependencies()
      rules_pkg_dependencies()
@@ -129,6 +129,22 @@ index aef33aa103..1ec243318f 100644
      rust_repository_set(
          name = "rust_linux_s390x",
          exec_triple = "s390x-unknown-linux-gnu",
+@@ -107,6 +113,13 @@ def envoy_download_go_sdks(go_version):
+     go_download_sdk(
+         name = "go_linux_arm64",
+         goos = "linux",
+         goarch = "arm64",
+         version = go_version,
+     )
++    go_download_sdk(
++        name = "go_linux_ppc64le",
++        goos = "linux",
++        goarch = "ppc64le",
++        version = go_version,
++    )
+     go_download_sdk(
+         name = "go_darwin_amd64",
+         goos = "darwin",
 diff --git a/bazel/envoy_library.bzl b/bazel/envoy_library.bzl
 index 9ab5aaed41..27b0093f49 100644
 --- a/bazel/envoy_library.bzl

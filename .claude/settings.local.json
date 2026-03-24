@@ -1,7 +1,9 @@
 {
   "permissions": {
     "allow": [
-      "WebFetch(domain:raw.githubusercontent.com)"
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(curl -s \"https://raw.githubusercontent.com/envoyproxy/envoy/v1.35.0/bazel/repository_locations.bzl\")",
+      "Bash(curl -s \"https://raw.githubusercontent.com/envoyproxy/envoy/v1.35.0/bazel/repositories.bzl\")"
     ]
   }
 }
