@@ -13,20 +13,25 @@ index 4f115fbaa4..b405f26d6a 100644
  ## Releases
 
  For further details please see our [release process](https://github.com/envoyproxy/envoy/blob/main/RELEASES.md).
-diff --git a/api/bazel/repositories.bzl b/api/bazel/repositories.bzl
-index 8669544cdf..4e3624f9dd 100644
---- a/api/bazel/repositories.bzl
-+++ b/api/bazel/repositories.bzl
-@@ -36,6 +36,10 @@ def api_dependencies():
-     )
-     external_http_archive(
-         name = "rules_buf",
-+        patch_cmds = [
-+            "sed -i 's/cpu not in \\[\"arm64\", \"amd64\"\\]/cpu not in [\"arm64\", \"amd64\", \"ppc64le\"]/' buf/internal/toolchain.bzl",
-+        ],
-     )
-     external_http_archive(
-         name = "com_github_openzipkin_zipkinapi",
+diff --git a/bazel/dependency_imports.bzl b/bazel/dependency_imports.bzl
+index aef33aa103..1ec243318f 100644
+--- a/bazel/dependency_imports.bzl
++++ b/bazel/dependency_imports.bzl
+@@ -13,7 +13,6 @@ load("@fuzzing_pip3//:requirements.bzl", pip_fuzzing_dependencies = "install_dep
+ load("@io_bazel_rules_go//go:deps.bzl", "go_download_sdk", "go_register_toolchains", "go_rules_dependencies")
+ load("@proxy_wasm_rust_sdk//bazel:dependencies.bzl", "proxy_wasm_rust_sdk_dependencies")
+-load("@rules_buf//buf:repositories.bzl", "rules_buf_toolchains")
+ load("@rules_foreign_cc//foreign_cc:repositories.bzl", "rules_foreign_cc_dependencies")
+@@ -71,10 +70,6 @@ def envoy_dependency_imports(go_version = GO_VERSION, jq_version = JQ_VERSION,
+     register_yq_toolchains(version = yq_version)
+     parser_deps()
+
+-    rules_buf_toolchains(
+-        sha256 = buf_sha,
+-        version = buf_version,
+-    )
+-
+     setup_sanitizer_libs()
 diff --git a/bazel/BUILD b/bazel/BUILD
 --- a/bazel/BUILD
 +++ b/bazel/BUILD
